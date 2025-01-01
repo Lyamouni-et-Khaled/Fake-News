@@ -1,4 +1,637 @@
-<! DOCTYPE>
-Bonjour à tous !
-Bienvenue sur mon site WEB
-<title> Un merveilleu essai</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>"Le Choix de Nikki" - Multi-Themes with QCM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /******************************************************************
+     * RESET & BASE
+     ******************************************************************/
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      transition: background 0.5s, color 0.5s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+
+    header {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    #theme-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    #theme-selector label {
+      font-size: 0.9rem;
+    }
+    #theme-selector select {
+      padding: 0.3rem;
+      font-size: 0.9rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    /******************************************************************
+     * GAME CONTAINER
+     ******************************************************************/
+    #game-container {
+      width: 90%;
+      max-width: 800px;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      padding: 2rem;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+
+    #story {
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    #story p {
+      margin-bottom: 1rem;
+    }
+    #story strong {
+      font-weight: bold;
+    }
+
+    #choices {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .choice-btn {
+      padding: 0.75rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-align: left;
+      transition: 
+        transform 0.1s ease,
+        box-shadow 0.2s ease;
+    }
+    .choice-btn:hover {
+      transform: scale(1.02);
+    }
+    .choice-btn:active {
+      transform: scale(0.98);
+    }
+
+    /******************************************************************
+     * EDUCATIONAL (QCM) BLOCK
+     ******************************************************************/
+    #educational {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      display: none; /* shown only if there's a QCM */
+      border-left: 4px solid;
+    }
+    #mcq-block {
+      margin-top: 1rem;
+    }
+    .mcq-option {
+      margin-bottom: 0.5rem;
+    }
+    .mcq-option input {
+      margin-right: 0.3rem;
+    }
+    #mcq-button {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background: #666;
+      color: #fff;
+    }
+    #mcq-feedback {
+      margin-top: 0.75rem;
+      font-weight: bold;
+    }
+
+    /******************************************************************
+     * THEME : CYBERPUNK
+     ******************************************************************/
+    body.theme-cyberpunk {
+      background: #000000;
+      color: #00ff95;
+    }
+    body.theme-cyberpunk #game-container {
+      background: rgba(0,0,0,0.8);
+      box-shadow: 0 0 10px #00ff95, 0 0 20px #00ff95;
+    }
+    body.theme-cyberpunk .choice-btn {
+      background: #00ff95;
+      color: #000000;
+      box-shadow: 0 0 10px #00ff95, 0 0 20px #00ff95;
+    }
+    body.theme-cyberpunk .choice-btn:hover {
+      box-shadow: 0 0 20px #00ff95, 0 0 40px #00ff95;
+    }
+    body.theme-cyberpunk #educational {
+      background: #1a1a1a;
+      border-color: #ff0095;
+      color: #fff;
+      box-shadow: 0 0 10px #ff0095;
+    }
+    body.theme-cyberpunk #mcq-button {
+      background: #ff0095;
+      color: #fff;
+    }
+
+    /******************************************************************
+     * THEME : APOCALYPSE
+     ******************************************************************/
+    body.theme-apocalypse {
+      background: radial-gradient(circle, #222, #000);
+      color: #ff5722;
+    }
+    body.theme-apocalypse #game-container {
+      background: rgba(0, 0, 0, 0.6);
+      border: 5px solid #d4af37; /* cadre doré */
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    }
+    body.theme-apocalypse .choice-btn {
+      background: linear-gradient(135deg, #4a4a4a, #8b4513);
+      border: 2px solid #d4af37;
+      color: #00ff00;
+      text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+    }
+    body.theme-apocalypse #educational {
+      background: #2a2a2a;
+      border-color: #ff0000;
+      color: #00ff00;
+    }
+    body.theme-apocalypse #mcq-button {
+      background: #d4af37;
+      color: #000;
+    }
+
+    /******************************************************************
+     * THEME : LIGHT NEON
+     ******************************************************************/
+    body.theme-lightneon {
+      background: linear-gradient(135deg, #f9f9f9, #e0eafc);
+      color: #333;
+    }
+    body.theme-lightneon #game-container {
+      background: linear-gradient(135deg, #ffffff, #f0f8ff);
+      border: 2px solid #e0e0e0;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+    body.theme-lightneon .choice-btn {
+      background: linear-gradient(135deg, #6c63ff, #4c47e7);
+      color: #fff;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+    body.theme-lightneon .choice-btn:hover {
+      background: linear-gradient(135deg, #4c47e7, #6c63ff);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    body.theme-lightneon #educational {
+      background: #e7eafe;
+      border-color: #6c63ff;
+    }
+    body.theme-lightneon #mcq-button {
+      background: #6c63ff;
+      color: #fff;
+    }
+
+    /******************************************************************
+     * THEME : DARK NEON
+     ******************************************************************/
+    body.theme-darkneon {
+      background: #121212;
+      color: #cfcfcf;
+    }
+    body.theme-darkneon #game-container {
+      background: #1b1b1b;
+      box-shadow: 0 0 10px #80ffea, 0 0 30px #80ffea;
+      border: 1px solid #80ffea;
+    }
+    body.theme-darkneon .choice-btn {
+      background: #80ffea;
+      color: #1b1b1b;
+      text-shadow: 0 0 5px #1b1b1b;
+    }
+    body.theme-darkneon .choice-btn:hover {
+      box-shadow: 0 0 10px #80ffea, 0 0 20px #80ffea;
+    }
+    body.theme-darkneon #educational {
+      background: #242424;
+      border-color: #fc28fb; /* rose flash */
+      color: #cfcfcf;
+      box-shadow: 0 0 10px #fc28fb;
+    }
+    body.theme-darkneon #mcq-button {
+      background: #fc28fb;
+      color: #fff;
+    }
+
+    /******************************************************************
+     * THEME : PREMIUM
+     ******************************************************************/
+    body.theme-premium {
+      background: linear-gradient(135deg, #fafafa, #efefef);
+      color: #333333;
+    }
+    body.theme-premium #game-container {
+      background: linear-gradient(135deg, #ffffff, #fefefe);
+      border: 2px solid #d1c7f0;
+      box-shadow: 0 12px 24px rgba(133, 110, 241, 0.2);
+      animation: premium-glow 3s infinite alternate;
+    }
+    @keyframes premium-glow {
+      0% { box-shadow: 0 12px 24px rgba(133, 110, 241, 0.2); }
+      100% { box-shadow: 0 16px 32px rgba(133, 110, 241, 0.4); }
+    }
+    body.theme-premium .choice-btn {
+      background: linear-gradient(135deg, #856ef1, #6d55e7);
+      color: #fff;
+      border: none;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+      font-weight: bold;
+    }
+    body.theme-premium .choice-btn:hover {
+      background: linear-gradient(135deg, #6d55e7, #856ef1);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    body.theme-premium #educational {
+      background: #f4f0ff;
+      border-color: #ad9af4;
+      color: #333;
+    }
+    body.theme-premium #mcq-button {
+      background: #ad9af4;
+      color: #333;
+    }
+
+  </style>
+</head>
+<body class="theme-cyberpunk">
+  <!-- HEADER : Titre & Sélecteur de Thème -->
+  <header>
+    <h1>Le Choix de Nikki</h1>
+    <div id="theme-selector">
+      <label for="themes">Theme:</label>
+      <select id="themes">
+        <option value="theme-cyberpunk">Cyberpunk</option>
+        <option value="theme-apocalypse">Apocalypse</option>
+        <option value="theme-lightneon">Light Neon</option>
+        <option value="theme-darkneon">Dark Neon</option>
+        <option value="theme-premium">Premium</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Conteneur du jeu narratif -->
+  <div id="game-container">
+    <div id="story"></div>
+    <div id="educational"></div>
+    <div id="choices"></div>
+  </div>
+
+  <script>
+    /************************************************************
+     * "Le Choix de Nikki" - Interactive Narrative (in English)
+     * ---------------------------------------------------------
+     * Now with multiple-choice questions (QCM).
+     ************************************************************/
+
+    // On utilise "answers" (tableau de réponses) et "correctIndex" (index de la bonne réponse)
+    // pour définir un QCM dans chaque passage, si souhaité.
+
+    const passages = [
+      {
+        id: 0,
+        text: [
+          "Nikki has just discovered she is pregnant. She lives in a US state with strict abortion laws and limited social support. She feels worried and confused.",
+          "She talks to her partner Sid about the situation.",
+          "<strong>Nikki:</strong> “I’m pregnant, and I don’t know what to do. We can’t afford it, and I’m not ready.”",
+          "<strong>Sid:</strong> “This is really tough. I’ll be here for you, but it’s your decision.”"
+        ],
+        // Pas de question multiple ici => on n'affiche pas la section QCM
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "Continue the pregnancy", nextId: 1 },
+          { text: "Seek an abortion",       nextId: 10 },
+          { text: "Look for advice or help",nextId: 20 },
+        ]
+      },
+      // ========== BRANCH 1: CONTINUE THE PREGNANCY ==========
+      {
+        id: 1,
+        text: [
+          "Nikki chooses to continue the pregnancy. She starts feeling immediate impacts:",
+          "Physical: “I’m always tired and nauseous. My employer won’t allow me extra sick days.”",
+          "Economic: “Medical bills are stacking up.”",
+          "Social: “Some friends support me, but others think I made the wrong choice.”"
+        ],
+        // QCM
+        question: "What is the average cost of a birth in the US without insurance?",
+        answers: [
+          "About $1,000",
+          "Around $10,000 to $15,000",
+          "Over $50,000"
+        ],
+        correctIndex: 1,
+        choices: [
+          { text: "Ask Sid and family for help", nextId: 2 },
+          { text: "Try to handle everything alone", nextId: 3 },
+        ]
+      },
+      {
+        id: 2,
+        text: [
+          "Nikki asks for support. Sid promises to work extra hours, but he’s unsure how long he can keep it up.",
+          "Nikki’s mother says she loves Nikki but cannot raise the baby for her.",
+          "Nikki looks for local resources but discovers the state offers limited support for single mothers."
+        ],
+        question: "Do the US offer paid maternity leave at the federal level?",
+        answers: [
+          "Yes, 6 months paid for everyone",
+          "No, only a few states do",
+          "Yes, but only for 2 weeks"
+        ],
+        correctIndex: 1,
+        choices: [
+          { text: "Continue and manage somehow", nextId: 4 }
+        ]
+      },
+      {
+        id: 3,
+        text: [
+          "Nikki decides to manage on her own. She works two jobs to afford bills during pregnancy.",
+          "Emotionally drained, she struggles with exhaustion and lacks support.",
+          "“I’m alone, and I don’t know if I can make it...”"
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "(Ending) She becomes a single mother in difficult conditions", nextId: 99, ending: 1 }
+        ]
+      },
+      {
+        id: 4,
+        text: [
+          "Nikki and Sid do their best to support each other. They find small ways to budget and share responsibilities.",
+          "Though life is tough, they stay together and raise the child against all odds."
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "(Ending) A united family, despite the challenges", nextId: 99, ending: 3 }
+        ]
+      },
+
+      // ========== BRANCH 2: ABORTION ==========
+      {
+        id: 10,
+        text: [
+          "Nikki schedules an appointment at a nearby clinic.",
+          "Outside, protesters shout: “You are a murderer!”",
+          "The clinic staff greets her warmly: “We’re here to help you. Take your time to decide.”"
+        ],
+        question: "What percentage of American women cite financial reasons for having an abortion?",
+        answers: [
+          "About 10%",
+          "About 50%",
+          "About 73%"
+        ],
+        correctIndex: 2,
+        choices: [
+          { text: "Go through with the procedure", nextId: 11 },
+          { text: "Leave the clinic and think more", nextId: 12 },
+        ]
+      },
+      {
+        id: 11,
+        text: [
+          "Nikki has the procedure. She feels a mixture of relief and guilt.",
+          "“I can finally focus on my future... but did I make a mistake?”"
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "Continue her studies, build her life", nextId: 13 }
+        ]
+      },
+      {
+        id: 12,
+        text: [
+          "Nikki leaves the clinic, still unsure. She wonders if she should see a counselor or talk to someone else."
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "Return to seeking help", nextId: 20 },
+        ]
+      },
+      {
+        id: 13,
+        text: [
+          "Nikki finishes her studies and starts advocating for women’s rights.",
+          "She says: “I want all women to have information and support, no matter where they live.”"
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "(Ending) A promising future in activism", nextId: 99, ending: 2 }
+        ]
+      },
+
+      // ========== BRANCH 3: SEEK ADVICE OR HELP ==========
+      {
+        id: 20,
+        text: [
+          "Nikki goes to her friend Lisa for advice.",
+          "Lisa: “Think about what you truly want, not what others say.”"
+        ],
+        question: "How many US states impose a mandatory waiting period before an abortion?",
+        answers: [
+          "Around 10 states",
+          "About 27 states",
+          "All 50 states"
+        ],
+        correctIndex: 1,
+        choices: [
+          { text: "Follow Lisa’s advice and choose an option", nextId: 21 },
+          { text: "Consult a professional for more details", nextId: 22 },
+        ]
+      },
+      {
+        id: 21,
+        text: [
+          "Nikki carefully thinks over her life goals, finances, and emotional needs. She must decide."
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "Return to continuing pregnancy", nextId: 1 },
+          { text: "Return to abortion option", nextId: 10 }
+        ]
+      },
+      {
+        id: 22,
+        text: [
+          "Nikki meets a counselor at a family planning center.",
+          "They explain the practical, emotional, and legal outcomes of both paths:",
+          "• Continuing the pregnancy: physical and financial challenges.",
+          "• Abortion: emotional weight, legal constraints.",
+          "Nikki must decide again."
+        ],
+        question: "How many states banned or severely restricted abortion after Roe v. Wade was overturned in 2022?",
+        answers: [
+          "About 14 states",
+          "Only 1 or 2 states",
+          "All of them"
+        ],
+        correctIndex: 0,
+        choices: [
+          { text: "Continue the pregnancy", nextId: 1 },
+          { text: "Seek an abortion", nextId: 10 }
+        ]
+      },
+
+      // ========== FINAL ENDING ==========
+      {
+        id: 99,
+        text: [
+          "You’ve reached an ending. Thank you for exploring Nikki’s story!",
+          "<em>Possible endings in this narrative:</em>",
+          "1) Single mother in tough conditions",
+          "2) A bright future after an abortion",
+          "3) A united family despite hardships",
+          "4) A path of activism and advocacy",
+          "5) Finding inner peace with post-abortion support",
+          "6) A family that grows stronger with help"
+        ],
+        answers: null,
+        correctIndex: null,
+        choices: [
+          { text: "Restart the story", nextId: 0 }
+        ]
+      }
+    ];
+
+    let currentPassageId = 0;
+
+    function showPassage(passageId) {
+      const passage = passages.find(p => p.id === passageId);
+      if (!passage) return;
+
+      currentPassageId = passageId;
+
+      // Update story text
+      const storyDiv = document.getElementById("story");
+      storyDiv.innerHTML = passage.text.map(t => `<p>${t}</p>`).join("");
+
+      // Prepare MCQ block
+      const educationalDiv = document.getElementById("educational");
+      if (passage.answers && Array.isArray(passage.answers)) {
+        // On a un QCM
+        educationalDiv.style.display = "block";
+        // question text (optionnel si on veut l'afficher)
+        const questionText = passage.question ? `<p><strong>Question:</strong> ${passage.question}</p>` : "";
+        // Générer les options radio
+        const mcqHtml = passage.answers.map((option, i) => {
+          return `
+            <div class="mcq-option">
+              <input type="radio" name="qcm" id="opt${i}" value="${i}">
+              <label for="opt${i}">${option}</label>
+            </div>
+          `;
+        }).join("");
+
+        educationalDiv.innerHTML = `
+          ${questionText}
+          <div id="mcq-block">
+            ${mcqHtml}
+            <button id="mcq-button">Check Answer</button>
+            <div id="mcq-feedback"></div>
+          </div>
+        `;
+
+        // Ajout listener sur le bouton
+        const checkBtn = document.getElementById("mcq-button");
+        checkBtn.addEventListener("click", () => {
+          const selected = document.querySelector("input[name='qcm']:checked");
+          const feedbackDiv = document.getElementById("mcq-feedback");
+          if (!selected) {
+            feedbackDiv.innerHTML = `<p style="color: #e67e22;">Please select an answer!</p>`;
+            return;
+          }
+          const chosenIndex = parseInt(selected.value);
+          if (chosenIndex === passage.correctIndex) {
+            feedbackDiv.innerHTML = `<p style="color: green;">Correct! Well done.</p>`;
+          } else {
+            feedbackDiv.innerHTML = `<p style="color: red;">Not quite! The correct answer is: <em>${passage.answers[passage.correctIndex]}</em></p>`;
+          }
+        });
+      } else {
+        // Pas de QCM dans ce passage
+        educationalDiv.style.display = "none";
+        educationalDiv.innerHTML = "";
+      }
+
+      // Update choices
+      const choicesDiv = document.getElementById("choices");
+      choicesDiv.innerHTML = "";
+      passage.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.classList.add("choice-btn");
+        btn.innerHTML = choice.text;
+        btn.onclick = () => {
+          showPassage(choice.nextId);
+        };
+        choicesDiv.appendChild(btn);
+      });
+    }
+
+    // Initialize the first passage
+    showPassage(currentPassageId);
+
+    // THEME SWITCHER
+    const themeSelect = document.getElementById("themes");
+    const bodyElement = document.body;
+
+    themeSelect.addEventListener("change", () => {
+      // Retire toutes les classes de thème
+      bodyElement.classList.remove(
+        "theme-cyberpunk",
+        "theme-apocalypse",
+        "theme-lightneon",
+        "theme-darkneon",
+        "theme-premium"
+      );
+      // Ajoute la nouvelle classe
+      const selectedTheme = themeSelect.value;
+      bodyElement.classList.add(selectedTheme);
+    });
+  </script>
+</body>
+</html>
